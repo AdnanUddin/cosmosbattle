@@ -8,6 +8,9 @@ public class PlanetController : MonoBehaviour
     private GameObject addOnObject;
 
     [SerializeField]
+    private GameObject planetSelectionObject;
+
+    [SerializeField]
     private TextMesh numberOfUnitsLabel;
 
     [SerializeField]
@@ -70,5 +73,9 @@ public class PlanetController : MonoBehaviour
     void UpdateNumberOfUnitsLabel()
     {
         numberOfUnitsLabel.text = numberOfUnits.ToString();
+    }
+
+    public void ToggleSelection() {
+        this.planetSelectionObject.SetActive(!this.planetSelectionObject.activeSelf); 
     }
 }
