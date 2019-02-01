@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlanetController : MonoBehaviour
 {
+    public const float ZAxis = 0.0f;
+
     [SerializeField]
     private GameObject addOnObject;
 
