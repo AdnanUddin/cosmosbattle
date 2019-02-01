@@ -5,7 +5,8 @@ using UnityEngine;
 public class InputController : MonoBehaviour
 {
     Ray ray;
-    RaycastHit hit;
+
+    private GameObject playerSelectedPlanet;
 
     // Start is called before the first frame update
     void Start()
@@ -20,14 +21,53 @@ public class InputController : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
 
-            foreach (RaycastHit hit in hits)
+            if (playerSelectedPlanet != null && hits.Length == 0) // clicked in the void
             {
-                if (hit.collider.gameObject.tag == "Player")
+                // Deselecting the planet
+                playerSelectedPlanet.GetComponentInParent<PlanetController>().ToggleSelection();
+                playerSelectedPlanet = null;
+            }
+            else
+            {
+                foreach (RaycastHit hit in hits)
                 {
-                    hit.collider.gameObject.GetComponentInParent<PlanetController>().ToggleSelection();
-                    Debug.Log("Hit a planet");
+                    // Select the player planet
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        this.SelectingAPlanet(hit);
+                    }
+                    else
+                    {
+                        if (hit.collider.gameObject.tag == "Enemy")
+                        {
+                            if (this.playerSelectedPlanet != null)
+                            {
+                                playerSelectedPlanet.GetComponentInParent<PlanetController>().SendUnits(hit.collider.gameObject);
+                                Debug.Log("Hit an enemy planet");
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+    void SelectingAPlanet(RaycastHit hit)
+    {
+        if (playerSelectedPlanet != null && playerSelectedPlanet != hit.collider.gameObject)
+        {
+            playerSelectedPlanet.GetComponentInParent<PlanetController>().ToggleSelection();
+        }
+
+        if (hit.collider.gameObject.GetComponentInParent<PlanetController>().ToggleSelection())
+        {
+            playerSelectedPlanet = hit.collider.gameObject;
+        }
+        else
+        {
+            playerSelectedPlanet = null;
+        }
+
+        Debug.Log("Hit a planet");
     }
 }

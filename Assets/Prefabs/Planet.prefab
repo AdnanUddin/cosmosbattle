@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1046415850}
   - component: {fileID: 1046415851}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: planetSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,9 +92,9 @@ GameObject:
   - component: {fileID: 68280643029852578}
   - component: {fileID: 68280643029852579}
   - component: {fileID: 68280643029852583}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: PlanetMesh
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,7 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 68280643568136897}
   - component: {fileID: 9089186426220828953}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,6 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addOnObject: {fileID: 3638846201153391762}
   planetSelectionObject: {fileID: 1046415849}
+  spaceShipUnit: {fileID: 8307422366682201401, guid: 2ea58d02c840cf543b00f8b9e7d73611,
+    type: 3}
   numberOfUnitsLabel: {fileID: 3169887186128085923}
   useAddOn: 0
   spawnInterval: 1
@@ -254,7 +256,7 @@ GameObject:
   - component: {fileID: 2164262798852734569}
   - component: {fileID: 2757652936931322400}
   - component: {fileID: 5843708539004480610}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Addon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,7 +348,7 @@ GameObject:
   - component: {fileID: 433886958182691351}
   - component: {fileID: 458859069448754840}
   - component: {fileID: 1279850633942977937}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +425,7 @@ GameObject:
   - component: {fileID: 8304907250630119028}
   - component: {fileID: 5487262245907343760}
   - component: {fileID: 7540440805552507384}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5121,7 +5123,7 @@ GameObject:
   - component: {fileID: 1036047754054162097}
   - component: {fileID: 7278796870526856338}
   - component: {fileID: 3169887186128085923}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: NumberOfUnits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
