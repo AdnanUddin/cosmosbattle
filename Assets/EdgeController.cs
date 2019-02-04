@@ -2,19 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EdgeController : MonoBehaviour
+public class EdgeController : ControllerBase
 {
     [SerializeField]
     private GameObject first;
     
     [SerializeField]
     private GameObject second;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        this.InitializeComponent();
-    }
 
     // Update is called once per frame
     void Update()
@@ -40,6 +34,10 @@ public class EdgeController : MonoBehaviour
         this.gameObject.transform.localScale = new Vector3(0.1f, distance, 0.1f);
         this.gameObject.transform.position = startingPosition;
         this.gameObject.transform.Rotate(new Vector3 {z = rotation });
+    }
 
+    public override void Create()
+    {
+        this.InitializeComponent();
     }
 }
