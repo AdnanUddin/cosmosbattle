@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelController : ControllerBase
@@ -41,6 +42,7 @@ public class LevelController : ControllerBase
             };
 
             var planet = Instantiate(planetType, startPostion, Quaternion.identity);
+
             this.planetControllerDictionary.Add(planet.GetComponent<PlanetController>(), planet);
 
             Destroy(planet, 10.0f);
@@ -52,11 +54,32 @@ public class LevelController : ControllerBase
     // Update is called once per frame
     void Update()
     {
-        
+        if (Time.timeSinceLevelLoad > 5)
+        {
+            this.DestroyPlanet();
+        }
     }
 
     public override void Create()
     {
         this.InitializePlanets();
+    }
+
+    private void DestroyPlanet()
+    {
+        foreach (var planet in this.planetControllerDictionary.Values)
+        {
+            Destroy(planet);
+        }
+    }
+
+    public override void Destory()
+    {
+        foreach (var planet in this.planetControllerDictionary.Values)
+        {
+            Destroy(planet);
+        }
+
+        this.planetControllerDictionary.Clear();
     }
 }
