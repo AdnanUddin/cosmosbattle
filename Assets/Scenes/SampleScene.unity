@@ -457,14 +457,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313827244}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 516de35b92590404396ce96143bb637e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7df76e499675d1542a6bf20599209e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   planetTypeList:
-  - {fileID: 1632191755}
   - {fileID: 96263865}
+  - {fileID: 96263865}
+  - {fileID: 1632191755}
+  - {fileID: 1632191755}
+  - {fileID: 1632191755}
 --- !u!4 &1313827246
 Transform:
   m_ObjectHideFlags: 0
