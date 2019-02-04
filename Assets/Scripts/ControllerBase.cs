@@ -11,9 +11,12 @@ public abstract class ControllerBase : MonoBehaviour
     
     public abstract void Create();
 
-    public virtual void  Destory()
+    public virtual void  DestroyObject()
     {
 
     }
+
+    public void SetGameObjectActive(bool value) => this.gameObject.SetActive(value);
+    public bool IsGameObjectActive => this.gameObject.activeSelf;
 
 }
