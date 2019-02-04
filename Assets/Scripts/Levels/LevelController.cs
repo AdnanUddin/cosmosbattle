@@ -8,9 +8,13 @@ public class LevelController : ControllerBase
 {
     [SerializeField]
     private List<GameObject> planetTypeList;
+
+    [SerializeField]
+    private GameObject edge;
     private LevelOptions options;
 
     private IList<PlanetController> planetControllerList;
+    private IList<EdgeController> edgeControllerList;
 
     public LevelController(LevelOptions options)
     {   
@@ -28,6 +32,7 @@ public class LevelController : ControllerBase
     {
         this.options = this.options ?? new LevelOptions { Levels = 3, PlanetCount = 5 };
         this.planetControllerList = this.planetControllerList ?? new List<PlanetController>();
+        this.edgeControllerList = this.edgeControllerList ?? new List<EdgeController>();
 
         int index = 2;
         int planetCount = this.options.PlanetCount;
@@ -48,10 +53,18 @@ public class LevelController : ControllerBase
             {
                 var planet = Instantiate(planetTypeList[randomPlanetType], startPostion, Quaternion.identity);
                 var planetController = planet.GetComponent<PlanetController>();
-                planetController.SetGameObjectActive(false);
                 this.planetControllerList.Add(planetController);
             }
-            index ++;
+            index = (index + 1) % 5;
+        }
+
+        for (int i = 0; i < this.options.PlanetCount; i++)
+        {   
+            var secondPlanetIndex = (i + 1) % this.options.PlanetCount;  
+            var edge = Instantiate(this.edge, Vector3.zero, Quaternion.identity);
+            var edgeController = EdgeFactory.CreateEdge(edge, this.planetControllerList[i], this.planetControllerList[secondPlanetIndex]);
+            this.edgeControllerList.Add(edgeController);
+            edgeController.SetGameObjectActive(true);
         }
 
     }
@@ -60,13 +73,13 @@ public class LevelController : ControllerBase
     void Update()
     {
         
-        if (Time.frameCount > 60 && Time.frameCount % 60 == 0 && this.planetControllerList.Count > 0)
-        {
-            if (this.planetControllerList.FirstOrDefault(p => !p.IsGameObjectActive) is PlanetController planetController)
-            {
-                planetController.SetGameObjectActive(true);
-            }
-        }
+        // if (Time.frameCount > 60 && Time.frameCount % 60 == 0 && this.planetControllerList.Count > 0)
+        // {
+        //     if (this.planetControllerList.FirstOrDefault(p => !p.IsGameObjectActive) is PlanetController planetController)
+        //     {
+        //         planetController.SetGameObjectActive(true);
+        //     }
+        // }
     }
 
     public override void Create()
@@ -78,7 +91,10 @@ public class LevelController : ControllerBase
     {
         var planet = this.planetControllerList.FirstOrDefault(p => p == planetController);
         planet?.DestroyObject();
-        this.planetControllerList.Remove(planetController);
+        if (planetController != null)
+        {
+            this.planetControllerList.Remove(planetController);
+        }
     }
 
     public override void DestroyObject()
