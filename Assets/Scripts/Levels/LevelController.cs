@@ -45,8 +45,6 @@ public class LevelController : ControllerBase
 
             this.planetControllerDictionary.Add(planet.GetComponent<PlanetController>(), planet);
 
-            Destroy(planet, 10.0f);
-
             index ++;
         }
     }
@@ -54,9 +52,10 @@ public class LevelController : ControllerBase
     // Update is called once per frame
     void Update()
     {
-        if (Time.timeSinceLevelLoad > 5)
+
+        if (Time.timeSinceLevelLoad % 3 == 0 && this.planetControllerDictionary.Count > 0)
         {
-            this.DestroyPlanet();
+            this.DestroyPlanet(this.planetControllerDictionary.FirstOrDefault().Key);
         }
     }
 
@@ -65,12 +64,10 @@ public class LevelController : ControllerBase
         this.InitializePlanets();
     }
 
-    private void DestroyPlanet()
+    private void DestroyPlanet(PlanetController planetController)
     {
-        foreach (var planet in this.planetControllerDictionary.Values)
-        {
-            Destroy(planet);
-        }
+        Destroy(this.planetControllerDictionary[planetController]);
+        this.planetControllerDictionary.Remove(planetController);
     }
 
     public override void Destory()
