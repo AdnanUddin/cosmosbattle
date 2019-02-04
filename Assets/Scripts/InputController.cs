@@ -42,7 +42,7 @@ public class InputController : MonoBehaviour
                         {
                             if (this.playerSelectedPlanet != null)
                             {
-                                playerSelectedPlanet.GetComponentInParent<PlanetController>().SendUnits(hit.collider.gameObject);
+                                playerSelectedPlanet.GetComponentInParent<PlanetController>().SendUnits(hit.collider.transform.parent.gameObject);
                                 Debug.Log("Hit an enemy planet");
                             }
                         }

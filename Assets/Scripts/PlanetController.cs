@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlanetController : MonoBehaviour
 {
+    public const float ZAxis = 0.0f;
+
     [SerializeField]
     private GameObject addOnObject;
 
@@ -96,12 +98,17 @@ public class PlanetController : MonoBehaviour
 
         for (int i = 0; i < unitsToDeploy; i++)
         {
-            GameObject spaceship = GameObject.Instantiate(spaceShipUnit, this.transform.position + Random.insideUnitSphere, Quaternion.LookRotation(Vector3.up, -Vector3.forward));
-           // spaceship.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            GameObject spaceship = GameObject.Instantiate(spaceShipUnit, this.transform.position + Random.insideUnitSphere, Random.rotationUniform);
+            // spaceship.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
             spaceship.GetComponent<SpaceShipController>().target = target;
         }
 
-        this.numberOfUnits -= unitsToDeploy;
+        this.SubtractUnit(unitsToDeploy);
+    }
+
+    public void SubtractUnit(int numberOfUnits)
+    {
+        this.numberOfUnits -= numberOfUnits;
     }
 }

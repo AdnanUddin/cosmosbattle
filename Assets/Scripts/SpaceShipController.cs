@@ -10,6 +10,9 @@ public class SpaceShipController : MonoBehaviour
     [SerializeField]
     private float angularSpeed = 1f;
 
+    [SerializeField]
+    private ParticleSystem explosion;
+
     public GameObject target;
 
     // Start is called before the first frame update
@@ -29,7 +32,31 @@ public class SpaceShipController : MonoBehaviour
 
     void FollowTarget()
     {
-        this.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(transform.up, target.transform.position - transform.position), angularSpeed * Time.deltaTime);
-        this.transform.Translate(Vector3.up * linearSpeed * Time.deltaTime, Space.Self);
+        transform.Translate(Vector3.forward *  Time.deltaTime * linearSpeed);
+
+        var rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * angularSpeed);
+        // this.transform.Translate(Vector3.up * linearSpeed * Time.deltaTime, Space.Self);
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.collider.tag == "Enemy")
+        {
+            col.transform.GetComponent<PlanetController>().SubtractUnit(1);
+
+            GameObject.Instantiate(explosion, col.contacts[0].point, Quaternion.LookRotation(col.contacts[0].normal), this.transform);
+
+            StartCoroutine(DestroyItself());
+        }
+    }
+
+    IEnumerator DestroyItself()
+    {
+        target = null;
+
+        GameObject.Destroy(this.transform.GetChild(0).gameObject);
+        yield return new WaitForSeconds(3);
+        GameObject.Destroy(this.transform.gameObject);
     }
 }
