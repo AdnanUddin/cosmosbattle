@@ -10,6 +10,11 @@ public class SpaceShipController : MonoBehaviour
     [SerializeField]
     private float angularSpeed = 1f;
 
+    [SerializeField]
+    private ParticleSystem explosion;
+
+    public GameObject source;
+
     public GameObject target;
 
     // Start is called before the first frame update
@@ -29,7 +34,45 @@ public class SpaceShipController : MonoBehaviour
 
     void FollowTarget()
     {
-        this.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(transform.up, target.transform.position - transform.position), angularSpeed * Time.deltaTime);
-        this.transform.Translate(Vector3.up * linearSpeed * Time.deltaTime, Space.Self);
+        transform.Translate(Vector3.forward * Time.deltaTime * linearSpeed);
+
+        var rotation = Quaternion.LookRotation((target.transform.position - transform.position) + (Random.insideUnitSphere * 0.5f));
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * angularSpeed);
+        // this.transform.Translate(Vector3.up * linearSpeed * Time.deltaTime, Space.Self);
+    }
+
+    // void OnTriggerExit(Collider other)
+    // {
+        
+    // }
+
+    void OnTriggerEnter(Collider col)
+    {
+        var planetController = col.transform.GetComponent<PlanetController>();
+
+        if (col.gameObject == target)
+        {
+            if (col.tag != this.tag)
+            {
+                planetController.SubtractUnit(1, this.tag);
+
+                GameObject.Instantiate(explosion, this.transform.position,Quaternion.identity, this.transform);
+            }
+            else
+            {
+                planetController.AddUnit(1);
+            }
+
+            StartCoroutine(DestroyItself());
+        }
+    }
+
+    IEnumerator DestroyItself()
+    {
+        target = null;
+
+        GameObject.Destroy(this.transform.GetChild(0).gameObject);
+        yield return new WaitForSeconds(3);
+        GameObject.Destroy(this.transform.gameObject);
     }
 }

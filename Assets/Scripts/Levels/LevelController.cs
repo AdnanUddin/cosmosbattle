@@ -58,6 +58,7 @@ public class LevelController : ControllerBase
             index = (index + 1) % 5;
         }
 
+
         for (int i = 0; i < this.options.PlanetCount; i++)
         {   
             var secondPlanetIndex = (i + 1) % this.options.PlanetCount;  
@@ -72,13 +73,6 @@ public class LevelController : ControllerBase
     // Update is called once per frame
     void Update()
     {
-        
-        // if (Time.frameCount > 60 && Time.frameCount % 60 == 0 && this.planetControllerList.Count > 0)
-        // {
-        //     if (this.planetControllerList.FirstOrDefault(p => !p.IsGameObjectActive) is PlanetController planetController)
-        //     {
-        //         planetController.SetGameObjectActive(true);
-        //     }
         // }
     }
 

@@ -21,6 +21,20 @@ public class InputController : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
 
+            if (hits.Length == 0) // clicked in the void
+            {
+                foreach (RaycastHit hit in hits)
+                {
+                    this.SelectingAPlanet(hit);
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray);
+
             if (playerSelectedPlanet != null && hits.Length == 0) // clicked in the void
             {
                 // Deselecting the planet
@@ -35,17 +49,20 @@ public class InputController : MonoBehaviour
                     // Select the player planet
                     if (hit.collider.gameObject.tag == "Player")
                     {
-                        this.SelectingAPlanet(hit);
+                        if (this.playerSelectedPlanet == null)
+                        {
+                            this.SelectingAPlanet(hit);
+                        }
+                        else
+                        {
+                            playerSelectedPlanet.GetComponentInParent<PlanetController>().SendUnits(hit.collider.transform.gameObject);
+                        }
                     }
                     else
                     {
-                        if (hit.collider.gameObject.tag == "Enemy")
+                        if (this.playerSelectedPlanet != null)
                         {
-                            if (this.playerSelectedPlanet != null)
-                            {
-                                playerSelectedPlanet.GetComponentInParent<PlanetController>().SendUnits(hit.collider.gameObject);
-                                Debug.Log("Hit an enemy planet");
-                            }
+                            playerSelectedPlanet.GetComponentInParent<PlanetController>().SendUnits(hit.collider.transform.gameObject);
                         }
                     }
                 }
