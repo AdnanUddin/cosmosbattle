@@ -17,6 +17,7 @@ public abstract class ControllerBase : MonoBehaviour
     }
 
     public void SetGameObjectActive(bool value) => this.gameObject.SetActive(value);
+
     public bool IsGameObjectActive => this.gameObject.activeSelf;
 
 }

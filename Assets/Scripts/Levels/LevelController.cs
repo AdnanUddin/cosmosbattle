@@ -9,38 +9,32 @@ public class LevelController : ControllerBase
     [SerializeField]
     private List<GameObject> planetTypeList;
 
-    [SerializeField]
-    private GameObject edge;
-    private LevelOptions options;
+    public LevelOptions Options;
 
     private IList<PlanetController> planetControllerList;
-    private IList<EdgeController> edgeControllerList;
-
-    public LevelController(LevelOptions options)
-    {   
-        this.options = options;
-        this.Initialize();
-    }   
 
     private void Initialize()
     {
-        this.planetTypeList = new List<GameObject>(this.options.Levels);
+        this.planetTypeList = new List<GameObject>(this.Options.Levels);
         this.planetControllerList = new List<PlanetController>();
     }
 
     private void InitializePlanets()
     {
-        this.options = this.options ?? new LevelOptions { Levels = 3, PlanetCount = 5 };
+        //this.Initialize();
+        this.Options = this.Options ?? new LevelOptions { Levels = 3, PlanetCount = 5 };
         this.planetControllerList = this.planetControllerList ?? new List<PlanetController>();
-        this.edgeControllerList = this.edgeControllerList ?? new List<EdgeController>();
 
         int index = 2;
-        int planetCount = this.options.PlanetCount;
+        int planetCount = this.Options.PlanetCount;
         var planetTypeList = this.planetTypeList.Where(pt => pt != null).ToList();
 
-        for (int i = 0; i < this.options.PlanetCount; i++)
+
+        var bounds = Camera.main.GetCameraBounds();
+        
+        for (int i = 0; i < this.Options.PlanetCount; i++)
         {     
-            int randomPlanetType = UnityEngine.Random.Range(0, planetTypeList.Count - 1);
+            int randomPlanetTypeIndex = UnityEngine.Random.Range(0, planetTypeList.Count - 1);
             var startPostion = new Vector3
             {
                 x = UnityEngine.Random.Range(-index, index),
@@ -48,32 +42,21 @@ public class LevelController : ControllerBase
                 z = PlanetController.ZAxis
             };
 
-            var planetType = planetTypeList[randomPlanetType];
+            var planetType = planetTypeList[randomPlanetTypeIndex];
             if (planetType != null)
             {
-                var planet = Instantiate(planetTypeList[randomPlanetType], startPostion, Quaternion.identity);
-                var planetController = planet.GetComponent<PlanetController>();
-                this.planetControllerList.Add(planetController);
+                var planet = PlanetFactory.CreatePlanet(planetTypeList[randomPlanetTypeIndex], startPostion, setActive: true);
+                this.planetControllerList.Add(planet);
             }
             index = (index + 1) % 5;
         }
 
-
-        for (int i = 0; i < this.options.PlanetCount; i++)
-        {   
-            var secondPlanetIndex = (i + 1) % this.options.PlanetCount;  
-            var edge = Instantiate(this.edge, Vector3.zero, Quaternion.identity);
-            var edgeController = EdgeFactory.CreateEdge(edge, this.planetControllerList[i], this.planetControllerList[secondPlanetIndex]);
-            this.edgeControllerList.Add(edgeController);
-            edgeController.SetGameObjectActive(true);
-        }
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        // }
     }
 
     public override void Create()
@@ -101,7 +84,7 @@ public class LevelController : ControllerBase
         this.planetControllerList.Clear();
     }
 
-    private void SetActive(PlanetController planetController, bool value)
+    private void SetPlanetActive(PlanetController planetController, bool value)
     {
         var planet = this.planetControllerList.FirstOrDefault(p => p == planetController);
         planet?.SetGameObjectActive(true);

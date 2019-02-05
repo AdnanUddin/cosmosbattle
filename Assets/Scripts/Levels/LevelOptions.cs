@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelOptions : MonoBehaviour
+public class LevelOptions
 {
-    [SerializeField]
     public int Levels { get; set; }
 
-    [SerializeField]
     public int PlanetCount { get; set; }
 
 }
