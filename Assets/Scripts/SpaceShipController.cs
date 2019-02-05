@@ -13,6 +13,8 @@ public class SpaceShipController : MonoBehaviour
     [SerializeField]
     private ParticleSystem explosion;
 
+    public GameObject source;
+
     public GameObject target;
 
     // Start is called before the first frame update
@@ -32,20 +34,34 @@ public class SpaceShipController : MonoBehaviour
 
     void FollowTarget()
     {
-        transform.Translate(Vector3.forward *  Time.deltaTime * linearSpeed);
+        transform.Translate(Vector3.forward * Time.deltaTime * linearSpeed);
 
-        var rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        var rotation = Quaternion.LookRotation((target.transform.position - transform.position) + (Random.insideUnitSphere * 0.5f));
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * angularSpeed);
         // this.transform.Translate(Vector3.up * linearSpeed * Time.deltaTime, Space.Self);
     }
 
-    void OnCollisionEnter(Collision col)
-    {
-        if (col.collider.tag == "Enemy")
-        {
-            col.transform.GetComponent<PlanetController>().SubtractUnit(1);
+    // void OnTriggerExit(Collider other)
+    // {
+        
+    // }
 
-            GameObject.Instantiate(explosion, col.contacts[0].point, Quaternion.LookRotation(col.contacts[0].normal), this.transform);
+    void OnTriggerEnter(Collider col)
+    {
+        var planetController = col.transform.GetComponent<PlanetController>();
+
+        if (col.gameObject == target)
+        {
+            if (col.tag != this.tag)
+            {
+                planetController.SubtractUnit(1, this.tag);
+
+                GameObject.Instantiate(explosion, this.transform.position,Quaternion.identity, this.transform);
+            }
+            else
+            {
+                planetController.AddUnit(1);
+            }
 
             StartCoroutine(DestroyItself());
         }

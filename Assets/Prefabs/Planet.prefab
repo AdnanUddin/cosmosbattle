@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 68280643029852581}
   - component: {fileID: 68280643029852578}
   - component: {fileID: 68280643029852583}
-  - component: {fileID: 68280643029852579}
   m_Layer: 9
   m_Name: PlanetMesh
   m_TagString: Player
@@ -178,19 +177,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!135 &68280643029852579
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 68280643029852576}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &68280643568136910
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,9 +188,10 @@ GameObject:
   - component: {fileID: 68280643568136897}
   - component: {fileID: 3248353364695955431}
   - component: {fileID: 2443961945900051566}
+  - component: {fileID: 7367946730514822637}
   m_Layer: 9
   m_Name: Planet
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -261,6 +248,20 @@ MonoBehaviour:
   numberOfUnitsLabel: {fileID: 3169887186128085923}
   useAddOn: 0
   spawnInterval: 1
+  unitsToDominate: 10
+--- !u!135 &7367946730514822637
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68280643568136910}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3638846201153391762
 GameObject:
   m_ObjectHideFlags: 0

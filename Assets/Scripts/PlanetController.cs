@@ -25,6 +25,9 @@ public class PlanetController : MonoBehaviour
     [Range(0.1f, 10f)]
     private float spawnInterval = 1f;
 
+    [SerializeField]
+    private int unitsToDominate = 10;
+
     private int numberOfUnits = 0;
 
     private float lastUnitSpawn;
@@ -65,7 +68,7 @@ public class PlanetController : MonoBehaviour
 
     void UnitSpawnCheck()
     {
-        if ((this.spawnInterval) < (Time.time - this.lastUnitSpawn))
+        if (this.tag != "NeutralPlanet" && (this.spawnInterval) < (Time.time - this.lastUnitSpawn))
         {
             this.SpawnUnit();
 
@@ -98,17 +101,49 @@ public class PlanetController : MonoBehaviour
 
         for (int i = 0; i < unitsToDeploy; i++)
         {
-            GameObject spaceship = GameObject.Instantiate(spaceShipUnit, this.transform.position + Random.insideUnitSphere, Random.rotationUniform);
+            GameObject spaceship = GameObject.Instantiate(spaceShipUnit, this.transform.position + (Random.insideUnitSphere * 0.2f), Random.rotationUniform);
             // spaceship.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
-            spaceship.GetComponent<SpaceShipController>().target = target;
+            var spaceshipController = spaceship.GetComponent<SpaceShipController>();
+
+            spaceship.tag = this.tag;
+            spaceshipController.source = this.gameObject;
+            spaceshipController.target = target;
         }
 
-        this.SubtractUnit(unitsToDeploy);
+        this.SubtractUnit(unitsToDeploy, null);
     }
 
-    public void SubtractUnit(int numberOfUnits)
+    public void SubtractUnit(int numberOfUnits, string unitSourceTag)
     {
         this.numberOfUnits -= numberOfUnits;
+
+        if (!string.IsNullOrEmpty(unitSourceTag))
+        {
+            if (this.numberOfUnits <= 0)
+            {
+                if (this.tag == "NeutralPlanet")
+                {
+                    this.numberOfUnits = 0;
+                    this.SetTag(unitSourceTag);
+                }
+                else if (this.tag != unitSourceTag)
+                {
+                    this.numberOfUnits = unitsToDominate;
+                    this.SetTag("NeutralPlanet");
+                }
+            }
+        }
+    }
+
+    public void AddUnit(int numberOfUnits)
+    {
+        this.numberOfUnits += numberOfUnits;
+    }
+
+    public void SetTag(string tag)
+    {
+        this.tag = tag;
+        this.transform.GetChild(0).tag = tag;
     }
 }
