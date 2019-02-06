@@ -23,5 +23,4 @@ public class CalculationHelper
 
         return v2 - v1;
     }
-    
 }

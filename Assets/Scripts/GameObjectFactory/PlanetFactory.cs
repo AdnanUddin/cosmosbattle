@@ -12,14 +12,25 @@ public class PlanetFactory : MonoBehaviour
         return controller;
     }
 
-    public static IEnumerable<PlanetController> CreatePlanetGroup(int count, GameObject planetType)
+    public static PlanetGroup CreatePlanetGroup()
     {
-        var planetList = new List<PlanetController>();
-        for (int i = 0; i < count; i++)
+        return new PlanetGroup(Vector3.zero, scale: 1.0f);
+    }
+
+    public static IEnumerable<PlanetGroup> CreatePlanetGroups(int planetCount)
+    {
+        var planetGroupList = new List<PlanetGroup>();
+        var planetGroupCount = planetCount / 3;
+        for (int i = 0; i < planetGroupCount; i = i++)
         {
-            planetList.Add(CreatePlanet(planetType, Vector3.zero));
+            planetGroupList.Add(PlanetFactory.CreatePlanetGroup());
         }
 
-        return planetList;
+        if (planetCount % 3 > 0)
+        {
+            planetGroupList.Add(PlanetFactory.CreatePlanetGroup());
+        }
+
+        return planetGroupList;
     }
 }
