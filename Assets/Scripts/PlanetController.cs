@@ -28,20 +28,27 @@ public class PlanetController : ControllerBase
     [SerializeField]
     private int unitsToDominate = 10;
 
+    [SerializeField]
+    private int unitsDeployBatch = 5;
+
     private int numberOfUnits = 0;
 
     private float lastUnitSpawn;
 
     private bool isSelected;
 
+    private int unitsToDeploy;
+
+    private GameObject target;
+
     // Start is called before the first frame update
-    // void Start()
-    // {
-    //     this.numberOfUnits = 0;
-    //     this.lastUnitSpawn = Time.time;
-    //     this.useAddOn = false;
-    //     this.isSelected = false;
-    // }
+    void Start()
+    {
+        this.numberOfUnits = 0;
+        this.lastUnitSpawn = Time.time;
+        this.useAddOn = false;
+        this.isSelected = false;
+    }
 
     // Update is called once per frame
     void Update()
@@ -56,6 +63,11 @@ public class PlanetController : ControllerBase
         }
 
         this.UpdateNumberOfUnitsLabel();
+
+        if (this.unitsToDeploy > 0 && (this.spawnInterval) < (Time.time - this.lastUnitSpawn / 2f))
+        {
+            this.DeployUnits();
+        }
     }
 
     void FixedUpdate()
@@ -96,10 +108,19 @@ public class PlanetController : ControllerBase
 
     public void SendUnits(GameObject target)
     {
-        Debug.Log("Send enemies");
-        int unitsToDeploy = this.numberOfUnits;
+        if (target != this.target)
+        {
+            Debug.Log("Send enemies");
+            this.unitsToDeploy = this.numberOfUnits;
+            this.target = target;
+        }
+    }
 
-        for (int i = 0; i < unitsToDeploy; i++)
+    public void DeployUnits()
+    {
+        var unitsBatch = Mathf.Min(this.unitsToDeploy, this.unitsDeployBatch);
+
+        for (int i = 0; i < unitsBatch; i++)
         {
             GameObject spaceship = GameObject.Instantiate(spaceShipUnit, this.transform.position + (Random.insideUnitSphere * 0.2f), Random.rotationUniform);
             // spaceship.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
@@ -108,16 +129,21 @@ public class PlanetController : ControllerBase
 
             spaceship.tag = this.tag;
             spaceshipController.source = this.gameObject;
-            spaceshipController.target = target;
+            spaceshipController.target = this.target;
         }
 
-        this.SubtractUnit(unitsToDeploy, null);
+        this.unitsToDeploy -= unitsBatch;
+        this.SubtractUnit(unitsBatch, null);
+
+        if (unitsToDeploy <= 0)
+        {
+            this.target = null;
+        }
     }
 
     public void SubtractUnit(int numberOfUnits, string unitSourceTag)
     {
         this.numberOfUnits -= numberOfUnits;
-
         if (!string.IsNullOrEmpty(unitSourceTag))
         {
             if (this.numberOfUnits <= 0)
@@ -155,7 +181,7 @@ public class PlanetController : ControllerBase
         this.isSelected = false;
     }
 
-    public override void DestroyObject()
+    public void DestroyObject()
     {
         Destroy(this.gameObject);
     }
