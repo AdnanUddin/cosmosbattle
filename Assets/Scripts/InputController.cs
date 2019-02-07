@@ -21,9 +21,9 @@ public class InputController : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
 
-            if (hits.Length == 0) // clicked in the void
+            foreach (RaycastHit hit in hits)
             {
-                foreach (RaycastHit hit in hits)
+                if (hit.collider.gameObject.tag == "Player")
                 {
                     this.SelectingAPlanet(hit);
                 }

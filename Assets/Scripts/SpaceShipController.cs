@@ -36,7 +36,7 @@ public class SpaceShipController : MonoBehaviour
     {
         transform.Translate(Vector3.forward * Time.deltaTime * linearSpeed);
 
-        var rotation = Quaternion.LookRotation((target.transform.position - transform.position) + (Random.insideUnitSphere * 0.5f));
+        var rotation = Quaternion.LookRotation((target.transform.position - transform.position) + (Random.insideUnitSphere * 0.7f));
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * angularSpeed);
         // this.transform.Translate(Vector3.up * linearSpeed * Time.deltaTime, Space.Self);
     }
