@@ -39,6 +39,7 @@ public class InputController : MonoBehaviour
             {
                 // Deselecting the planet
                 playerSelectedPlanet.GetComponentInParent<PlanetController>().ToggleSelection();
+                var planetControll = playerSelectedPlanet.GetComponentInParent<PlanetController>();
                 playerSelectedPlanet = null;
             }
             else

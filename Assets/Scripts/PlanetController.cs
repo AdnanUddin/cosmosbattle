@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlanetController : MonoBehaviour
+public class PlanetController : ControllerBase
 {
     public const float ZAxis = 0.0f;
 
@@ -35,13 +35,13 @@ public class PlanetController : MonoBehaviour
     private bool isSelected;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        this.numberOfUnits = 0;
-        this.lastUnitSpawn = Time.time;
-        this.useAddOn = false;
-        this.isSelected = false;
-    }
+    // void Start()
+    // {
+    //     this.numberOfUnits = 0;
+    //     this.lastUnitSpawn = Time.time;
+    //     this.useAddOn = false;
+    //     this.isSelected = false;
+    // }
 
     // Update is called once per frame
     void Update()
@@ -145,5 +145,18 @@ public class PlanetController : MonoBehaviour
     {
         this.tag = tag;
         this.transform.GetChild(0).tag = tag;
+    }
+
+    public override void Create()
+    {
+        this.numberOfUnits = 0;
+        this.lastUnitSpawn = Time.time;
+        this.useAddOn = false;
+        this.isSelected = false;
+    }
+
+    public override void DestroyObject()
+    {
+        Destroy(this.gameObject);
     }
 }

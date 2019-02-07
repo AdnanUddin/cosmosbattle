@@ -464,9 +464,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetTypeList:
   - {fileID: 96263865}
-  - {fileID: 96263865}
-  - {fileID: 1632191755}
-  - {fileID: 1632191755}
   - {fileID: 1632191755}
 --- !u!4 &1313827246
 Transform:
@@ -499,6 +496,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlanetRed
+      objectReference: {fileID: 0}
+    - target: {fileID: 68280643568136910, guid: 0e1510f41ef489d429e5277dc006067c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 68280643568136897, guid: 0e1510f41ef489d429e5277dc006067c,
         type: 3}
@@ -565,6 +567,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9089186426220828953, guid: 0e1510f41ef489d429e5277dc006067c,
+        type: 3}
+      propertyPath: useAddOn
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e1510f41ef489d429e5277dc006067c, type: 3}
 --- !u!1001 &68280643690292265
@@ -578,6 +585,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Planet
+      objectReference: {fileID: 0}
+    - target: {fileID: 68280643568136910, guid: 0e1510f41ef489d429e5277dc006067c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 68280643568136897, guid: 0e1510f41ef489d429e5277dc006067c,
         type: 3}
@@ -642,6 +654,11 @@ PrefabInstance:
     - target: {fileID: 9089186426220828953, guid: 0e1510f41ef489d429e5277dc006067c,
         type: 3}
       propertyPath: spawnInterval
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9089186426220828953, guid: 0e1510f41ef489d429e5277dc006067c,
+        type: 3}
+      propertyPath: useAddOn
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

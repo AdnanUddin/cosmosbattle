@@ -9,55 +9,46 @@ public class LevelController : ControllerBase
     [SerializeField]
     private List<GameObject> planetTypeList;
 
-    private IDictionary<PlanetController, GameObject> planetControllerDictionary;
-    private LevelOptions options;
+    public LevelOptions Options;
 
-    public LevelController(LevelOptions options)
-    {   
-        this.options = options;
-        this.Initialize();
-    }   
+    private IList<PlanetController> planetControllerList;
 
     private void Initialize()
     {
-        this.planetTypeList = new List<GameObject>(this.options.Levels);
-        this.planetControllerDictionary = new Dictionary<PlanetController, GameObject>();
+        this.planetTypeList = new List<GameObject>(this.Options.Levels);
+        this.planetControllerList = new List<PlanetController>();
     }
 
     private void InitializePlanets()
     {
-        this.options = this.options ?? new LevelOptions { Levels = 3, PlanetCount = 5 };
-        this.planetControllerDictionary = this.planetControllerDictionary ?? new Dictionary<PlanetController, GameObject>();
+        //this.Initialize();
+        this.Options = this.Options ?? new LevelOptions { Levels = 3, PlanetCount = 7 };
+        this.planetControllerList = this.planetControllerList ?? new List<PlanetController>();
 
-        int index = 2;
-        int planetCount = this.options.PlanetCount;
+        int planetCount = this.Options.PlanetCount;
+        var planetTypeList = this.planetTypeList.Where(pt => pt != null).ToList();
 
-        foreach(var planetType in this.planetTypeList)
+
+        var bounds = Camera.main.GetCameraBounds();
+        var startPostionCenter = new Vector3(bounds.max.x, 0.0f, 0.0f);
+        var left = new Vector3(bounds.min.x, 0, 0);
+        var planetGroup  = new PlanetGroup(left, scale: 2.0f);
+
+        foreach (var startPostion in planetGroup.coordinates)
         {
-            var startPostion = new Vector3
+            int randomPlanetTypeIndex = UnityEngine.Random.Range(0, planetTypeList.Count - 1);
+            var planetType = planetTypeList[randomPlanetTypeIndex];
+            if (planetType != null)
             {
-                x = UnityEngine.Random.Range(-index, index),
-                y = UnityEngine.Random.Range(-index, index),
-                z = PlanetController.ZAxis
-            };
-
-            var planet = Instantiate(planetType, startPostion, Quaternion.identity);
-
-            this.planetControllerDictionary.Add(planet.GetComponent<PlanetController>(), planet);
-
-            //Destroy(planet, 10.0f);
-
-            index ++;
+                var planet = PlanetFactory.CreatePlanet(planetTypeList[randomPlanetTypeIndex], startPostion, setActive: true);
+                this.planetControllerList.Add(planet);
+            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // if (Time.timeSinceLevelLoad > 5)
-        // {
-        //     this.DestroyPlanet();
-        // }
     }
 
     public override void Create()
@@ -65,21 +56,29 @@ public class LevelController : ControllerBase
         this.InitializePlanets();
     }
 
-    private void DestroyPlanet()
+    private void DestroyPlanet(PlanetController planetController)
     {
-        foreach (var planet in this.planetControllerDictionary.Values)
+        var planet = this.planetControllerList.FirstOrDefault(p => p == planetController);
+        planet?.DestroyObject();
+        if (planetController != null)
         {
-            Destroy(planet);
+            this.planetControllerList.Remove(planetController);
         }
     }
 
-    public override void Destory()
+    public override void DestroyObject()
     {
-        foreach (var planet in this.planetControllerDictionary.Values)
+        foreach (var planet in this.planetControllerList)
         {
-            Destroy(planet);
+            planet?.DestroyObject();
         }
 
-        this.planetControllerDictionary.Clear();
+        this.planetControllerList.Clear();
+    }
+
+    private void SetPlanetActive(PlanetController planetController, bool value)
+    {
+        var planet = this.planetControllerList.FirstOrDefault(p => p == planetController);
+        planet?.SetGameObjectActive(true);
     }
 }
